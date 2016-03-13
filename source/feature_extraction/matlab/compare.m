@@ -1,0 +1,22 @@
+function distance =  compare(image1,image2,size)
+if(size==4)
+directions_hist1_4_1=hist_4directions(image1);
+directions_hist1_4_2=hist_4directions(image2);
+diff=directions_hist1_4_1-directions_hist1_4_2;
+distance=sum(diff.*diff);
+elseif(size==8)
+directions_hist2_8_1=hist_8directions(image1);
+directions_hist2_8_2=hist_8directions(image2);
+diff=directions_hist2_8_1-directions_hist2_8_2;
+distance=sum(diff.*diff);
+elseif(size==12)
+directions_hist3_12_1=hist_12directions(image1);
+directions_hist3_12_2=hist_12directions(image2);
+diff=directions_hist3_12_1-directions_hist3_12_2;
+distance=sum(diff.*diff);
+elseif(size==16)
+directions_hist4_16_1=hist_16directions(image1);
+directions_hist4_16_2=hist_16directions(image2);
+diff=directions_hist4_16_1-directions_hist4_16_2;
+distance=sum(diff.*diff);
+end
