@@ -1,5 +1,4 @@
-import data_handling
-from data_handling import load_features_and_labels
+
 import unittest
 
 
@@ -16,8 +15,7 @@ class TestDataHandling(unittest.TestCase):
         :rtype:
         """
         try:
-            import data_handling.py
-            from data_handling import load_features_and_labels
+            from .data_handling import load_features_and_labels
             _train, _train_label, _test, _test_label, _feature_name = load_features_and_labels()
         except Exception:
             self.fail('Failed to test_load_features_and_labels')
