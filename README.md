@@ -21,7 +21,7 @@ conda install cython
 
 ### Boost and more dependencies
 ```bat
-git submodule add https://github.com/boostorg/boost.git third_party/boost foreach --recursive 
+git submodule add https://github.com/boostorg/boost.git third_party/boost
 git submodule update --init --recursive
 rem  git submodule foreach git merge origin master
 cd third_party
@@ -37,8 +37,50 @@ move third_party/boost/stage/lib third_party/boost_lib
 ### PyCUDA
 + Make sure that vcvarsall.bat and amd64/cl.exe is in PATH
 + Make sure that CUDA bin, lib and include directories are in PATH
++ [Reference blog](https://kerpanic.wordpress.com/2015/09/28/pycuda-windows-installation-offline/)
+
 ```bat
-pip install pycuda
+git submodule add http://git.tiker.net/trees/pycuda.git third_party/pycuda
+git submodule update --init --recursive
+cd third_party
+cd pycuda
+python configure.py
+```
+
++ siteconf.py file will be generated please update it with
+
+```py
+BOOST_INC_DIR = []
+BOOST_LIB_DIR = []
+BOOST_COMPILER = 'msvc'
+USE_SHIPPED_BOOST = True
+BOOST_PYTHON_LIBNAME = ['libboost_python3-vc140-mt-1_61']
+BOOST_THREAD_LIBNAME = ['libboost_thread-vc140-mt-1_61']
+CUDA_TRACE = False
+CUDA_ROOT = 'D:\\InstalledPrograms\\Nvidia\\CUDA\\v75'
+CUDA_ENABLE_GL = False
+CUDA_ENABLE_CURAND = True
+CUDADRV_LIB_DIR = ['${CUDA_ROOT}/lib', '${CUDA_ROOT}/lib/x64']
+CUDADRV_LIBNAME = ['cuda']
+CUDART_LIB_DIR = ['${CUDA_ROOT}/lib', '${CUDA_ROOT}/lib/x64']
+CUDART_LIBNAME = ['cudart']
+CURAND_LIB_DIR = ['${CUDA_ROOT}/lib', '${CUDA_ROOT}/lib/x64']
+CURAND_LIBNAME = ['curand']
+CXXFLAGS = ['/EHsc']
+LDFLAGS = ['/FORCE']
+```
+
++ Next
+
+```bat
+python setup.py build
+python setup.py install
+```
+
++ Next update `nvcc.profile` in cuda installation bin directory to:
+
+```
+INCLUDES        +=  "-I$(TOP)/include" "-I$(TOP)/include/cudart" "-ID:\InstalledPrograms\Nvidia\CUDA\v75\include" $(_SPACE_)
 ```
 
 ### Intel math kernel libraries (optional)
