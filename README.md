@@ -23,6 +23,7 @@ conda install cython
 ```bat
 git submodule add https://github.com/boostorg/boost.git third_party/boost foreach --recursive 
 git submodule update --init --recursive
+git submodule foreach git merge origin master
 cd third_party
 cd boost
 bootstrap.bat
