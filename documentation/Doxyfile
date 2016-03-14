@@ -815,8 +815,7 @@ RECURSIVE              = YES
 EXCLUDE                = ../third_party \
                          ../third_party/boost \
                          ../third_party/boost_lib \
-                         ../third_party/pycuda \
-                         ../source/feature_extraction/matlab
+                         ../third_party/pycuda
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded
