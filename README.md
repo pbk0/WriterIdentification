@@ -6,17 +6,35 @@
 ## Environment
 + Currently tested for 
     + Windows 10 and Ubuntu 14.04 
-    + Python 3.4.4
+    + Python 3.5.1
 
 ## Dependencies
 
 ### Python Libraries (mandatory)
 ```bat
 source activate py3
-conda install python=3.4.4
+conda install python=3.5
 conda install scikit-learn
 conda install scikit-image
 conda install cython
+```
+
+### Boost for windows
++ Download boost source from https://sourceforge.net/projects/boost/files/boost/1.60.0/
++ Extract to folder `./third_part/boost_1_60_0`
+```bat
+git submodule add https://github.com/boostorg/boost.git ./third_party
+cd third_party\boost_1_60_0
+bootstrap.bat
+b2
+bjam
+```
+
+### PyCUDA
++ Make sure that vcvarsall.bat and amd64/cl.exe is in PATH
++ Make sure that CUDA bin, lib and include directories are in PATH
+```bat
+pip install pycuda
 ```
 
 ### Intel math kernel libraries (optional)
