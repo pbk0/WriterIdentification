@@ -14,6 +14,7 @@
       <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/source" isTestSource="false" />
     </content>
+    <content url="file://$MODULE_DIR$/../praveenneuron.github.io/writer_identification_doc" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

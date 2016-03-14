@@ -10,6 +10,13 @@
           </resourceRoots>
         </entryData>
       </entry>
+      <entry url="file://$PROJECT_DIR$/../praveenneuron.github.io/writer_identification_doc">
+        <entryData>
+          <resourceRoots>
+            <path value="file://$PROJECT_DIR$/../praveenneuron.github.io/writer_identification_doc" />
+          </resourceRoots>
+        </entryData>
+      </entry>
     </contentEntries>
   </component>
 </project>
