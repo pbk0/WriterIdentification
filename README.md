@@ -20,8 +20,6 @@ conda install cython
 ```
 
 ### Boost for windows
-+ Download boost source from https://sourceforge.net/projects/boost/files/boost/1.60.0/
-+ Extract to folder `./third_part/boost_1_60_0`
 ```bat
 git submodule add https://github.com/boostorg/boost.git ./third_party
 cd third_party\boost_1_60_0
