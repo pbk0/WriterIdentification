@@ -6,11 +6,10 @@
 **About Project**
 ```txt
 This project is about author identification based on handwritten 
-documents, and it is based on Kaggle competition hosted at ICFHR 2012.
+documents.
 
 [More details about implementation about algorithm will be added in 'Report and results' section later]
 ```
-*[ICFHR 2012 - Arabic Writer Identification (Kaggle Competition)](https://www.kaggle.com/c/awic2012/data)*
 
 **Further Information and links**
 + [Environment and installing instructions](http://praveenneuron.github.io/writer_identification_doc/html/md_installation.html)
@@ -27,5 +26,5 @@ documents, and it is based on Kaggle competition hosted at ICFHR 2012.
 **Documentation is hosted on Github [(Click here)](http://praveenneuron.github.io/writer_identification_doc/html/index.html)**
 
 **Download source code** [(Click here)](https://github.com/praveenneuron/WriterIdentification/archive/master.zip)
-+ *Note: You need to have Github login and access to repository to download (It is private now)*
++ *Note: You need to have Github login and access to repository for downloading (It is private now)*
 + *But you can still browse the code inside doxygen*

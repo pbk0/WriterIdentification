@@ -13,7 +13,7 @@ def _read_data(file_name):
     """
     This method takes input the file name and returns back the numpy array of samples and labels.
     :param file_name: the file name to read
-    :return: sample and label nump array
+    :return: sample and label numpy array
     """
     f = open(file_name)
     # Ignore the header
