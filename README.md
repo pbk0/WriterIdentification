@@ -19,7 +19,7 @@ conda install scikit-image
 conda install cython
 ```
 
-### Boost for windows
+### Boost and more dependencies
 ```bat
 git submodule add https://github.com/boostorg/boost.git third_party/boost foreach --recursive 
 git submodule update --init --recursive
