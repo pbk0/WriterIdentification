@@ -21,7 +21,7 @@ conda install cython
 
 ### Boost for windows
 ```bat
-git submodule add https://github.com/boostorg/boost.git ./third_party
+git submodule add https://github.com/boostorg/boost.git third_party/boost
 cd third_party\boost_1_60_0
 bootstrap.bat
 b2
