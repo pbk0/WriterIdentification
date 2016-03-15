@@ -5,8 +5,7 @@
 
 **About Project**
 ```txt
-This project is about author identification based on handwritten 
-documents.
+This project is about author identification based on handwritten documents.
 
 [More details about implementation about algorithm will be added in 'Report and results' section later]
 ```

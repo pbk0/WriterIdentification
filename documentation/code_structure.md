@@ -14,4 +14,6 @@
     + `run_benchmark.bat` runs benchmarks and reports results
 + `./source`
     + Contains the python and cython source code
+    + `data_handling.py` file for handling data
+    + `unit_tests.py` file for unit tests
 
