@@ -72,7 +72,7 @@ g_classifiers_try = {
 
 
 def execute_classifier(classifier_name, classifier):
-    print "..................................................................."
+    print("...................................................................")
     start_time = time.time()
     classifier.fit(g_train, g_train_label)
     train_predictions = classifier.predict(g_train)
@@ -96,7 +96,7 @@ def execute_classifier(classifier_name, classifier):
 
     print_str += "\n\t-- time taken :" + str(end_time-start_time)
 
-    print print_str
+    print(print_str)
     f_out = open("report/_Classifier " + classifier_name+".txt", "w")
     f_out.write(print_str + "\n")
     f_out.close()
