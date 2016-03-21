@@ -88,9 +88,10 @@ for epoch in range(num_epochs):
     print("Time: %f" % (time.time() - start_time))
 
     if epoch % 10 == 0:
-        np.save('../data/rbm_learned_weights/_' + str(epoch) + '_numpy_w_vh_', w_vh)
-        np.save('../data/rbm_learned_weights/_' + str(epoch) + '_numpy_w_v_', w_v)
-        np.save('../data/rbm_learned_weights/_' + str(epoch) + '_numpy_w_h_', w_h)
-        np.save('../data/rbm_learned_weights/_' + str(epoch) + '_numpy_err_', np.mean(err))
+        path = '../data/new_representation/rbm_' + str(num_hid) + '/_' + str(epoch)
+        np.save(path + '_numpy_w_vh_', w_vh)
+        np.save(path + '_numpy_w_v_', w_v)
+        np.save(path + '_numpy_w_h_', w_h)
+        np.save(path + '_numpy_err_', np.mean(err))
 
 
