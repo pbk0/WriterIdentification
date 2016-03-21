@@ -14,6 +14,7 @@ conda install python=3.5
 conda install scikit-learn
 conda install scikit-image
 conda install cython
+conda install pandas
 ```
 
 ### Boost and more dependencies
