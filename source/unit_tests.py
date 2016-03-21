@@ -2,9 +2,13 @@
 This file hods Unit tests for different functionality of project.
 """
 import unittest
+import sys
+# To print on console or to file
+custom_stream = sys.stdout
+# custom_stream = open("report.txt", "w", encoding="utf-8")
 
 
-class TestDataHandling(unittest.TestCase):
+class TestWriterIdentification(unittest.TestCase):
     """
     Class for unit testing functions in data_handling.py
     """
@@ -17,17 +21,12 @@ class TestDataHandling(unittest.TestCase):
         :rtype:
         """
         try:
-            from .data_handling import load_features_and_labels
+            from source.utility.data_handling import load_features_and_labels
             _train, _train_label, _test, _test_label, _feature_name = load_features_and_labels()
         except Exception:
             self.fail('Failed to test_load_features_and_labels')
 
-
-class TestPyCUDA(unittest.TestCase):
-    """
-    Class to check PyCUDA functionlity
-    """
-
+    @unittest.skip
     def test_pycuda(self):
         """
         Test pycuda installation with small example.
@@ -61,3 +60,15 @@ class TestPyCUDA(unittest.TestCase):
             #print(a)
         except Exception:
             self.fail('Still not working')
+
+
+if __name__ == '__main__':
+
+    # run suite
+    custom_stream.write('\n----------------------------------------------------------------------\n')
+    custom_stream.write('\n          ***      Writer Identification Tests           ***          \n')
+    custom_stream.write('\n----------------------------------------------------------------------\n\n')
+    suite1 = unittest.TestLoader().loadTestsFromTestCase(TestWriterIdentification)
+    unittest.TextTestRunner(verbosity=3, stream=custom_stream).run(suite1)
+
+

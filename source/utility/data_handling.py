@@ -85,7 +85,7 @@ def load_features_and_labels():
     _feature_name = _read_feature_name(g_train_file)
 
     # print info
-    print("Using features without rbm")
+    # print("Using features without rbm")
 
     # return
     return _train, _train_label, _test, _test_label, _feature_name
