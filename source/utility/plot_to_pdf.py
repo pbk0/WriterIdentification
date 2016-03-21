@@ -11,6 +11,13 @@ import pandas as pd
 import matplotlib
 
 
+def plot_rbm_error():
+    """
+
+    :return:
+    :rtype:
+    """
+
 if __name__ == '__main__':
     df = pd.DataFrame(np.random.randn(10,2))
     df.columns = ['Column 1', 'Column 2']
@@ -18,5 +25,6 @@ if __name__ == '__main__':
     ax.set_xlabel("X label")
     ax.set_ylabel("Y label")
     ax.set_title("Title")
+
     plt.tight_layout()
     plt.savefig("image1.pdf")

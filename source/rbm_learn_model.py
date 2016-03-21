@@ -16,9 +16,6 @@ import time
 import numpy as np
 
 
-# import util
-
-
 def train_rbm(num_hid, start_epoch, end_epoch):
     """
     Train the RBM and dump learned weights as numpy errors in data folder.
@@ -58,6 +55,7 @@ def train_rbm(num_hid, start_epoch, end_epoch):
     wu_h = np.zeros((num_hid, 1))
 
     # Load if start epoch is different than 0
+    # this piece of code loads the training persisted for previous iterations
     if start_epoch != 0:
         if start_epoch % 50 != 0:
             raise ValueError('start_epoch can only be multiple of 50')
@@ -110,7 +108,9 @@ def train_rbm(num_hid, start_epoch, end_epoch):
 
         print("Mean squared error: %f" % np.mean(err))
         print("Time: %f" % (time.time() - start_time))
+        print('...........\n')
 
+        # Dump training weights after every 50 iterations
         if epoch % 50 == 0:
             path = '../data/new_representation/rbm_' + str(num_hid) + '/_' + str(epoch)
             np.save(path + '_numpy_w_vh_', w_vh)
