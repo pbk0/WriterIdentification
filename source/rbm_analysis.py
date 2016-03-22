@@ -1,6 +1,7 @@
 """
 This file is responsible for utility methods to analyse the training of RBMs.
 You can only run this code if you have trained RBMs for respective HIDDEN_NEURONS.
+http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.plot.html
 """
 import numpy as np
 import os
@@ -54,7 +55,7 @@ def plot_training_error(hidden_neurons):
     pass
 
 
-def build_hidden_activities(hidden_neurons, start_epoch, end_epoch, skip):
+def build_hidden_activities(hidden_neurons, select_epochs):
     """
 
     This routine plots hidden activities based on test data.
@@ -62,12 +63,8 @@ def build_hidden_activities(hidden_neurons, start_epoch, end_epoch, skip):
 
     :param hidden_neurons:
     :type hidden_neurons:
-    :param start_epoch:
-    :type start_epoch: int
-    :param end_epoch:
-    :type end_epoch: int
-    :param skip: how many epochs to jump
-    :type skip: int
+    :param select_epochs: select epocs to plot
+    :type select_epochs: list
     :return:
     :rtype:
     """
@@ -81,17 +78,20 @@ def build_hidden_activities(hidden_neurons, start_epoch, end_epoch, skip):
     g_train, g_train_label, g_test, g_test_label, g_feature_name = load_features_and_labels()
     _train = np.transpose(np.asarray(g_train))
     _test = np.transpose(np.asarray(g_test))
+    _random = np.random.rand(_train.shape[0], _train.shape[1])
 
     # hidden activity
     test_hidden_activities = []
     test_hidden_activities_bin = []
     train_hidden_activities = []
     train_hidden_activities_bin = []
+    random_hidden_activities = []
+    random_hidden_activities_bin = []
     activities_epochs = []
     activities_mse = []
 
     # get the epochs
-    for epoch in range(start_epoch, end_epoch, skip):
+    for epoch in select_epochs:
 
         print('Working on epoch ' + str(epoch) + '\n')
 
@@ -104,7 +104,6 @@ def build_hidden_activities(hidden_neurons, start_epoch, end_epoch, skip):
         #
         activities_epochs.append(epoch)
         activities_mse.append(err)
-
 
         #######################################################
         # positive phase
@@ -142,11 +141,31 @@ def build_hidden_activities(hidden_neurons, start_epoch, end_epoch, skip):
         h_test2 = np.asarray(sum(h_test2))
         train_hidden_activities.append(h_test2)
 
+        #######################################################
+        # positive phase
+        # g_train_h = 1. / (1 + np.exp(-(np.dot(w_vh.T, _train) + w_h)))
+        h_test = 1. / (1 + np.exp(-(np.dot(w_vh.T, _random) + w_h)))
+
+        # sample hidden activity
+        h_test1 = 1. * (h_test > np.random.rand(hidden_neurons, h_test.shape[1]))
+        h_test1 = np.transpose(h_test1)
+        h_test1 = np.asarray(sum(h_test1))
+
+        # add to list bin
+        random_hidden_activities_bin.append(h_test1)
+
+        # add to list
+        h_test2 = np.transpose(h_test)
+        h_test2 = np.asarray(sum(h_test2))
+        random_hidden_activities.append(h_test2)
+
     # store to file
     test_hidden_activities = np.asarray(test_hidden_activities)
     test_hidden_activities_bin = np.asarray(test_hidden_activities_bin)
     train_hidden_activities = np.asarray(train_hidden_activities)
     train_hidden_activities_bin = np.asarray(train_hidden_activities_bin)
+    random_hidden_activities = np.asarray(train_hidden_activities)
+    random_hidden_activities_bin = np.asarray(train_hidden_activities_bin)
     activities_epochs = np.asarray(activities_epochs)
     activities_mse = np.asarray(activities_mse)
     np.savez_compressed(
@@ -155,6 +174,8 @@ def build_hidden_activities(hidden_neurons, start_epoch, end_epoch, skip):
         test_hidden_activities_bin=test_hidden_activities_bin,
         train_hidden_activities=train_hidden_activities,
         train_hidden_activities_bin=train_hidden_activities_bin,
+        random_hidden_activities=random_hidden_activities,
+        random_hidden_activities_bin=random_hidden_activities_bin,
         activities_epochs=activities_epochs,
         activities_mse=activities_mse
     )
@@ -166,10 +187,12 @@ def plot_hidden_activities(hidden_neurons, epoch_slice, hidden_neuron_slice):
     This routine plots hidden activities based on test data.
     This helps us to visualize how the training of RBM progressed as error reduces.
 
+    http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.plot.html
+
     :param hidden_neuron_slice: decide which hidden neuron activities to plot
-    :type hidden_neuron_slice: slice
+    :type hidden_neuron_slice:
     :param epoch_slice: decide which epochs to consider
-    :type epoch_slice: slice
+    :type epoch_slice:
     :param hidden_neurons:
     :type hidden_neurons: int
     :return:
@@ -182,85 +205,41 @@ def plot_hidden_activities(hidden_neurons, epoch_slice, hidden_neuron_slice):
     save_path = '../documentation/'
 
     npzfile = np.load(directory + 'hidden_activities.npz')
-    test_hidden_activities = np.asarray(npzfile['test_hidden_activities'][epoch_slice, hidden_neuron_slice])
-    test_hidden_activities_bin = np.asarray(npzfile['test_hidden_activities_bin'][epoch_slice, hidden_neuron_slice])
-    train_hidden_activities = np.asarray(npzfile['train_hidden_activities'][epoch_slice, hidden_neuron_slice])
-    train_hidden_activities_bin = np.asarray(npzfile['train_hidden_activities_bin'][epoch_slice, hidden_neuron_slice])
+    test_hidden_activities = np.asarray(npzfile['test_hidden_activities'][np.ix_(epoch_slice, hidden_neuron_slice)])
+    test_hidden_activities_bin = np.asarray(npzfile['test_hidden_activities_bin'][np.ix_(epoch_slice, hidden_neuron_slice)])
+    train_hidden_activities = np.asarray(npzfile['train_hidden_activities'][np.ix_(epoch_slice, hidden_neuron_slice)])
+    train_hidden_activities_bin = np.asarray(npzfile['train_hidden_activities_bin'][np.ix_(epoch_slice, hidden_neuron_slice)])
+    random_hidden_activities = np.asarray(npzfile['random_hidden_activities'][np.ix_(epoch_slice, hidden_neuron_slice)])
+    random_hidden_activities_bin = np.asarray(npzfile['random_hidden_activities_bin'][np.ix_(epoch_slice, hidden_neuron_slice)])
     activities_epochs = np.asarray(npzfile['activities_epochs'][epoch_slice])
     activities_mse = np.asarray(npzfile['activities_mse'][epoch_slice])
 
     # test_hidden_activities
-    print('Doing ... test_hidden_activities')
-    df = DataFrame(data=np.transpose(test_hidden_activities))
-    df.plot(subplots=True, figsize=(6, 8))
+    print('Doing ... ')
+    df = DataFrame(data=np.transpose(random_hidden_activities_bin))
+    df.plot(subplots=True, figsize=(8, 8))
     plt.legend(loc='best')
     plt.axis('off')
     plt.tight_layout()
-    plt.savefig(save_path+"RBM_test_hidden_activities_"+str(hidden_neurons)+".pdf")
-    plt.clf()
-
-
-    
-    # test_hidden_activities_bin
-    print('Doing ... test_hidden_activities_bin')
-    #df = DataFrame(test_hidden_activities_bin, index=activities_epochs)
-    #plt.pcolor(df)
-    #plt.yticks(np.arange(0.5, len(df.index), 1), df.index)
-    #plt.xticks(np.arange(0.5, len(df.columns), 1), df.columns)
-    #plt.show()
-    #ax = df.plot()
-    ax2 = sns.heatmap(test_hidden_activities_bin, cmap="Greens")
-    ax2.set_xlabel("Hidden Neurons")
-    ax2.set_ylabel("Hidden Layer Activity")
-    ax2.set_title("Hidden layer activity with " + str(hidden_neurons) + " hidden neurons.")
-    plt.axis('off')
-    plt.tight_layout()
-    plt.savefig(save_path+"RBM_test_hidden_activities_bin_"+str(hidden_neurons)+".pdf")
-    plt.clf()
-
-    # train_hidden_activities
-    print('Doing ... train_hidden_activities')
-    #df = DataFrame(train_hidden_activities, index=activities_epochs)
-    #plt.pcolor(df)
-    #plt.yticks(np.arange(0.5, len(df.index), 1), df.index)
-    #plt.xticks(np.arange(0.5, len(df.columns), 1), df.columns)
-    #plt.show()
-    #ax = df.plot()
-    ax3 = sns.heatmap(train_hidden_activities, cmap="Greens")
-    ax3.set_xlabel("Hidden Neurons")
-    ax3.set_ylabel("Hidden Layer Activity")
-    ax3.set_title("Hidden layer activity with " + str(hidden_neurons) + " hidden neurons.")
-    plt.axis('off')
-    plt.tight_layout()
-    plt.savefig(save_path+"RBM_train_hidden_activities_"+str(hidden_neurons)+".pdf")
-    plt.clf()
-    
-    # train_hidden_activities_bin
-    print('Doing ... train_hidden_activities_bin')
-    #df = DataFrame(train_hidden_activities_bin)
-    #plt.pcolor(df)
-    #plt.yticks(np.arange(0.5, len(df.index), 1), df.index)
-    #plt.xticks(np.arange(0.5, len(df.columns), 1), df.columns)
-    #plt.show()
-    #ax = df.plot()
-    ax4 = sns.heatmap(train_hidden_activities_bin, cmap="Greens")
-    ax4.set_xlabel("Hidden Neurons")
-    ax4.set_ylabel("Hidden Layer Activity")
-    ax4.set_title("Hidden layer activity with " + str(hidden_neurons) + " hidden neurons.")
-    plt.axis('off')
-    plt.tight_layout()
-    plt.savefig(save_path+"RBM_train_hidden_activities_bin_"+str(hidden_neurons)+".pdf")
+    plt.savefig(save_path+"RBM_hidden_activities_"+str(hidden_neurons)+".pdf")
     plt.clf()
 
 
 if __name__ == '__main__':
 
-    #plot_training_error(hidden_neurons=HIDDEN_NEURONS)
+    # training error analysis
+    if False:
+        plot_training_error(hidden_neurons=HIDDEN_NEURONS)
 
-    #build_hidden_activities(hidden_neurons=HIDDEN_NEURONS, start_epoch=0, end_epoch=57, skip=1)
-    plot_hidden_activities(
-        hidden_neurons=HIDDEN_NEURONS,
-        epoch_slice=slice(0, 10, 1),
-        hidden_neuron_slice=slice(0, 500)
-    )
+    # hidden activity analysis
+    #select_epochs_to_analyze = [0, 1, 2, 3, 4, 5, 6, 1000, 3000, 3550]
+    select_epochs_to_analyze = [0,1,2,4,8,16,32,100,150]
+    if True:
+        build_hidden_activities(hidden_neurons=HIDDEN_NEURONS, select_epochs=select_epochs_to_analyze)
+    if True:
+        plot_hidden_activities(
+            hidden_neurons=HIDDEN_NEURONS,
+            epoch_slice=np.arange(select_epochs_to_analyze.__len__()),
+            hidden_neuron_slice=np.arange(0, 100)
+        )
 
