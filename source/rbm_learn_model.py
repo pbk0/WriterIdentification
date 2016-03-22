@@ -16,9 +16,11 @@ import time
 import numpy as np
 
 
-def train_rbm(num_hid, start_epoch, end_epoch):
+def train_rbm(num_hid, start_epoch, end_epoch, skip_iter):
     """
     Train the RBM and dump learned weights as numpy errors in data folder.
+    :param skip_iter: number of iterations to skip for dumping
+    :type skip_iter: int
     :param num_hid: number of hidden neuron to train model for.
     :type num_hid: int
     :param start_epoch: the starting epoch. If you have previous iteration results saved you can continue from here :)
@@ -74,7 +76,7 @@ def train_rbm(num_hid, start_epoch, end_epoch):
         err = []
 
         # Dump training weights after every 50 iterations
-        if epoch % 50 == 0:
+        if epoch % skip_iter == 0:
             path = '../data/new_representation/rbm_' + str(num_hid) + '/_' + str(epoch)
             np.save(path + '_numpy_w_vh_', w_vh)
             np.save(path + '_numpy_w_v_', w_v)
@@ -120,10 +122,10 @@ def train_rbm(num_hid, start_epoch, end_epoch):
         print('...........\n')
 
         # Dump training error after every 50 iterations
-        if epoch % 50 == 0:
+        if epoch % skip_iter == 0:
             path = '../data/new_representation/rbm_' + str(num_hid) + '/_' + str(epoch)
             np.save(path + '_numpy_err_', np.mean(err))
 
 if __name__ == '__main__':
-    train_rbm(num_hid=4000, start_epoch=0, end_epoch=3000)
-    #train_rbm(num_hid=4000, start_epoch=0, end_epoch=101)
+    #train_rbm(num_hid=4000, start_epoch=0, end_epoch=3000, skip_iter=1)
+    train_rbm(num_hid=4000, start_epoch=0, end_epoch=101, skip_iter=1)
