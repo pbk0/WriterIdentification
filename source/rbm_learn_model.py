@@ -90,14 +90,14 @@ def train_rbm(num_hid, start_epoch, end_epoch):
             wu_h += h.sum(1)[:, np.newaxis]
 
             # sample hiddens
-            wu_vh -= np.dot(v, h.T)
-            wu_v -= v.sum(1)[:, np.newaxis]
             h = 1. * (h > np.random.rand(num_hid, batch_size))
 
             # negative phase
             v = 1. / (1 + np.exp(-(np.dot(w_vh, h) + w_v)))
             h = 1. / (1 + np.exp(-(np.dot(w_vh.T, v) + w_h)))
 
+            wu_vh -= np.dot(v, h.T)
+            wu_v -= v.sum(1)[:, np.newaxis]
             wu_h -= h.sum(1)[:, np.newaxis]
 
             # update weights
