@@ -81,7 +81,6 @@ def train_rbm(num_hid, start_epoch, end_epoch, skip_iter):
             np.save(path + '_numpy_w_vh_', w_vh)
             np.save(path + '_numpy_w_v_', w_v)
             np.save(path + '_numpy_w_h_', w_h)
-            np.save(path + '_numpy_err_', np.mean(err))
 
         for batch in range(num_batches):
             v_true = dat[:, batch * batch_size:(batch + 1) * batch_size]
