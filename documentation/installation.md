@@ -15,6 +15,7 @@ conda install scikit-learn
 conda install scikit-image
 conda install cython
 conda install pandas
+conda install seaborn
 ```
 
 ### Boost and more dependencies

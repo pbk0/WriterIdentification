@@ -65,10 +65,11 @@ def train_rbm(num_hid, start_epoch, end_epoch):
         w_h = np.load(path + '_numpy_w_h_.npy')
         print('\n\nLoaded epoch: ' + str(start_epoch) + ' and error is ' + str(float(np.load(path + '_numpy_err_.npy')))
               + ' .....\n\n\n')
+        start_epoch += 1
 
     start_time = time.time()
-    for epoch in range(start_epoch + 1, end_epoch):
-        print("Epoch %i" % (epoch + 1))
+    for epoch in range(start_epoch, end_epoch):
+        print("Epoch %i" % epoch)
         print("Hidden units " + str(num_hid))
         err = []
 
@@ -120,4 +121,5 @@ def train_rbm(num_hid, start_epoch, end_epoch):
 
 
 if __name__ == '__main__':
-    train_rbm(num_hid=4000, start_epoch=1000, end_epoch=1101)
+    train_rbm(num_hid=4000, start_epoch=0, end_epoch=3000)
+    #train_rbm(num_hid=4000, start_epoch=0, end_epoch=101)
