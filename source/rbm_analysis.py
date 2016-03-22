@@ -215,14 +215,16 @@ def plot_hidden_activities(hidden_neurons, epoch_slice, hidden_neuron_slice):
     activities_mse = np.asarray(npzfile['activities_mse'][epoch_slice])
 
     # test_hidden_activities
+    data_arr=np.transpose(random_hidden_activities_bin)
     print('Doing ... ')
-    df = DataFrame(data=np.transpose(random_hidden_activities_bin))
+    df = DataFrame(data=data_arr)
     df.plot(subplots=True, figsize=(8, 8))
     plt.legend(loc='best')
     plt.axis('off')
     plt.tight_layout()
     plt.savefig(save_path+"RBM_hidden_activities_"+str(hidden_neurons)+".pdf")
     plt.clf()
+    np.savetxt(save_path+"RBM_hidden_activities_"+str(hidden_neurons)+".csv", data_arr, delimiter=',')
 
 
 if __name__ == '__main__':
@@ -234,7 +236,7 @@ if __name__ == '__main__':
     # hidden activity analysis
     #select_epochs_to_analyze = [0, 1, 2, 3, 4, 5, 6, 1000, 3000, 3550]
     select_epochs_to_analyze = [0,1,2,4,8,16,32,100,150]
-    if True:
+    if False:
         build_hidden_activities(hidden_neurons=HIDDEN_NEURONS, select_epochs=select_epochs_to_analyze)
     if True:
         plot_hidden_activities(
