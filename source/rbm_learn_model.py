@@ -73,6 +73,14 @@ def train_rbm(num_hid, start_epoch, end_epoch):
         print("Hidden units " + str(num_hid))
         err = []
 
+        # Dump training weights after every 50 iterations
+        if epoch % 50 == 0:
+            path = '../data/new_representation/rbm_' + str(num_hid) + '/_' + str(epoch)
+            np.save(path + '_numpy_w_vh_', w_vh)
+            np.save(path + '_numpy_w_v_', w_v)
+            np.save(path + '_numpy_w_h_', w_h)
+            np.save(path + '_numpy_err_', np.mean(err))
+
         for batch in range(num_batches):
             v_true = dat[:, batch * batch_size:(batch + 1) * batch_size]
             v = v_true
@@ -111,14 +119,10 @@ def train_rbm(num_hid, start_epoch, end_epoch):
         print("Time: %f" % (time.time() - start_time))
         print('...........\n')
 
-        # Dump training weights after every 50 iterations
+        # Dump training error after every 50 iterations
         if epoch % 50 == 0:
             path = '../data/new_representation/rbm_' + str(num_hid) + '/_' + str(epoch)
-            np.save(path + '_numpy_w_vh_', w_vh)
-            np.save(path + '_numpy_w_v_', w_v)
-            np.save(path + '_numpy_w_h_', w_h)
             np.save(path + '_numpy_err_', np.mean(err))
-
 
 if __name__ == '__main__':
     train_rbm(num_hid=4000, start_epoch=0, end_epoch=3000)
