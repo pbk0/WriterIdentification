@@ -218,7 +218,7 @@ def plot_hidden_activities(hidden_neurons, epoch_slice, hidden_neuron_slice):
     data_arr=np.transpose(random_hidden_activities_bin)
     print('Doing ... ')
     df = DataFrame(data=data_arr)
-    df.plot(subplots=True, figsize=(8, 8))
+    df.plot(subplots=True, figsize=(8, 16))
     plt.legend(loc='best')
     plt.axis('off')
     plt.tight_layout()
@@ -235,7 +235,7 @@ if __name__ == '__main__':
 
     # hidden activity analysis
     #select_epochs_to_analyze = [0, 1, 2, 3, 4, 5, 6, 1000, 3000, 3550]
-    select_epochs_to_analyze = [0,1,2,4,8,16,32,100,150]
+    select_epochs_to_analyze = [0,1,2,4,8,16,32,100,150,300,600,1000,2000,3000]
     if False:
         build_hidden_activities(hidden_neurons=HIDDEN_NEURONS, select_epochs=select_epochs_to_analyze)
     if True:
