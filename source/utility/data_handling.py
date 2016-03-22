@@ -117,6 +117,6 @@ def make_pickle_from_csv():
     """
     pass
 
-
+def load_hidden_activites()
 
 

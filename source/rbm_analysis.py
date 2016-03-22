@@ -148,18 +148,19 @@ def build_hidden_activities(hidden_neurons, start_epoch, end_epoch, skip):
     train_hidden_activities_bin = np.asarray(train_hidden_activities_bin)
     activities_epochs = np.asarray(activities_epochs)
     activities_mse = np.asarray(activities_mse)
-
-    np.save(directory + 'test_hidden_activities', test_hidden_activities)
-    np.save(directory + 'test_hidden_activities_bin', test_hidden_activities_bin)
-    np.save(directory + 'train_hidden_activities', train_hidden_activities)
-    np.save(directory + 'train_hidden_activities_bin', train_hidden_activities_bin)
-    np.save(directory + 'activities_epochs', activities_epochs)
-    np.save(directory + 'activities_mse', activities_mse)
+    np.savez_compressed(
+        file=directory + 'hidden_activities',
+        test_hidden_activities=test_hidden_activities,
+        test_hidden_activities_bin=test_hidden_activities_bin,
+        train_hidden_activities=train_hidden_activities,
+        train_hidden_activities_bin=train_hidden_activities_bin,
+        activities_epochs=activities_epochs,
+        activities_mse=activities_mse
+    )
 
 
 if __name__ == '__main__':
     print(plt.style.available)
     #plot_training_error(hidden_neurons=HIDDEN_NEURONS)
 
-    build_hidden_activities(hidden_neurons=HIDDEN_NEURONS, start_epoch=0, end_epoch=3551, skip=50)
-
+    #build_hidden_activities(hidden_neurons=HIDDEN_NEURONS, start_epoch=0, end_epoch=3551, skip=50)
