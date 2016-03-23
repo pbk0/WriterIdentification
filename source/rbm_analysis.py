@@ -16,9 +16,11 @@ from pandas.io.sas.sas7bdat import _index
 HIDDEN_NEURONS = 4000
 
 
-def plot_training_error(hidden_neurons):
+def plot_training_error(hidden_neurons, epoch_select):
     """
     Plot the training errors for various epochs
+    :param epoch_select:
+    :type epoch_select:
     :param hidden_neurons:
     :type hidden_neurons:
     :return:
@@ -28,22 +30,17 @@ def plot_training_error(hidden_neurons):
 
     path = '../data/new_representation/rbm_' + str(hidden_neurons) + '/'
     save_path = '../documentation/'
-    files = os.listdir(path)
-    mean_squared_error = []
+    err_all = []
+    index_all = []
 
-    for file in files:
-        ff = file.split('_')
-        for f in ff:
-            if f == 'err':
-                err = np.load(path + file)
-                epoch = int(ff[1])
-                mean_squared_error.append((epoch, float(err)))
+    for epoch in epoch_select:
+        err_all.append(float(np.load(path + '_' + str(epoch) + '_numpy_err_.npy')))
+        index_all.append(epoch)
 
-    mean_squared_error.sort()
-    err_all = np.asarray([v for k, v in mean_squared_error])
-    index_all = np.asarray([k for k, v in mean_squared_error])
+    err_all = np.asarray(err_all)
+    index_all = np.asarray(index_all)
 
-    df = pd.DataFrame(data=err_all[1:], index=index_all[1:])
+    df = pd.DataFrame(data=err_all, index=index_all)
     df.columns = ['RBM error']
     ax = df.plot()
     ax.set_xlabel("Epochs")
@@ -51,6 +48,7 @@ def plot_training_error(hidden_neurons):
     ax.set_title("Mean squared error of RBM with " + str(hidden_neurons) + " hidden neurons.")
     plt.tight_layout()
     plt.savefig(save_path+"RBM_mse_"+str(hidden_neurons)+".pdf")
+    np.savetxt(save_path+"RBM_mse_"+str(hidden_neurons)+".csv", err_all[1:], delimiter=',')
 
     pass
 
@@ -230,15 +228,15 @@ def plot_hidden_activities(hidden_neurons, epoch_slice, hidden_neuron_slice):
 if __name__ == '__main__':
 
     # training error analysis
-    if False:
-        plot_training_error(hidden_neurons=HIDDEN_NEURONS)
+    if True:
+        plot_training_error(hidden_neurons=HIDDEN_NEURONS, epoch_select=np.arange(50, 3550, 50))
 
     # hidden activity analysis
     #select_epochs_to_analyze = [0, 1, 2, 3, 4, 5, 6, 1000, 3000, 3550]
     select_epochs_to_analyze = [0,1,2,4,8,16,32,100,150,300,600,1000,2000,3000]
     if False:
         build_hidden_activities(hidden_neurons=HIDDEN_NEURONS, select_epochs=select_epochs_to_analyze)
-    if True:
+    if False:
         plot_hidden_activities(
             hidden_neurons=HIDDEN_NEURONS,
             epoch_slice=np.arange(select_epochs_to_analyze.__len__()),
