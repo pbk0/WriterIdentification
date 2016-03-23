@@ -25,6 +25,8 @@ from sklearn.pipeline import Pipeline
 from sklearn.feature_selection import SelectFromModel
 from sklearn.metrics import f1_score
 from collections import namedtuple
+from sklearn.decomposition import PCA, LatentDirichletAllocation
+from sklearn.manifold import LocallyLinearEmbedding, Isomap
 
 # global variables
 g_train = None
@@ -87,7 +89,24 @@ def get_classifier_dict():
     :return: dictionary
     :rtype: dict
     """
+    
     dictionary = {
+        "Logistic Regression": LogisticRegression(),
+        "SGD": SGDClassifier(),
+        "Gaussian Naive Bayes": GaussianNB(),
+        "1 Nearest Neighbors": KNeighborsClassifier(1),
+        "Linear Discriminant Analysis": LinearDiscriminantAnalysis(),
+        "Quadratic Discriminant Analysis": QuadraticDiscriminantAnalysis(),
+        "SVM Linear": SVC(kernel="linear", C=0.025),
+        "SVM RBF": SVC(gamma=2, C=1),
+        "Decision Tree": DecisionTreeClassifier(),
+        "Random Forest 10": RandomForestClassifier(n_estimators=10),
+        "Random Forest 100": RandomForestClassifier(n_estimators=100),
+        "Extra Trees 10": ExtraTreesClassifier(n_estimators=10),
+        "Extra Trees 100": ExtraTreesClassifier(n_estimators=100),
+    }
+    
+    dictionary_ = {
         "Logistic Regression": LogisticRegression(),
         "SGD": SGDClassifier(),
         "Gaussian Naive Bayes": GaussianNB(),
@@ -164,7 +183,7 @@ def execute_classifier(classifier, classifier_title, new_representation):
 def save_parallel_mem_struct(parallel_mem_struct_list, report_type):
     """
     Save the parallel memory structure for further reporting
-    :param report_type: ['As it is' 'RBM' 'PCA' 'LDA']
+    :param report_type: ['ASITIS' 'RBM' 'PCA' 'LDA']
     :type report_type: str
     :param parallel_mem_struct_list:
     :type parallel_mem_struct_list: list
@@ -188,7 +207,7 @@ def save_parallel_mem_struct(parallel_mem_struct_list, report_type):
 def print_parallel_mem_struct(report_type):
     """
     Load and print parallel memory structure
-    :param report_type: which report you want to print ['As it is' 'RBM' 'PCA' 'LDA' 'all']
+    :param report_type: which report you want to print ['ASITIS' 'RBM' 'PCA' 'LDA' 'all']
     :type report_type: str
     :return:
     :rtype:
@@ -196,15 +215,15 @@ def print_parallel_mem_struct(report_type):
     pass
 
 
-def run_parallel_with_as_it_is_representation():
+def run_parallel_with_ASITIS_representation():
     """
-    Run machine learning algorithms in parallel with as it is representation.
+    Run machine learning algorithms in parallel with ASITIS representation.
     :return:
     :rtype:
     """
     # global vars to set
     global g_train, g_train_label, g_test, g_test_label, g_feature_name
-    new_representation = 'As it is'
+    new_representation = 'ASITIS'
 
     # garbage collection
     gc.collect()
@@ -227,6 +246,59 @@ def run_parallel_with_as_it_is_representation():
         for title in classifier_dict:
             res = execute_classifier(
                 classifier=classifier_dict[title],
+                classifier_title=title,
+                new_representation=new_representation
+            )
+            training_jobs_results.append(res)
+
+    # save results
+    save_parallel_mem_struct(training_jobs_results, new_representation)
+
+    # garbage collection
+    g_train = None
+    g_train_label = None
+    g_test = None
+    g_test_label = None
+    g_feature_name = None
+    training_jobs_results = None
+    gc.collect()
+
+
+def run_parallel_with_LinearSVC_representation():
+    """
+    Run machine learning algorithms in parallel with SVC representation.
+    :return:
+    :rtype:
+    """
+    # global vars to set
+    global g_train, g_train_label, g_test, g_test_label, g_feature_name
+    new_representation = 'LinearSVC'
+
+    # garbage collection
+    gc.collect()
+
+    # fetch meta info
+    num_cores = multiprocessing.cpu_count()
+    classifier_dict = get_classifier_dict()
+
+    # load default representation
+    g_train, g_train_label, g_test, g_test_label, g_feature_name = load_features_and_labels()
+
+    # storage of results
+    training_jobs_results = []
+
+    # launch threads
+    if PARALLEL_SUPPORT:
+        Parallel(n_jobs=num_cores)(delayed(execute_classifier)(classifier_dict[title], title, new_representation)
+                                   for title in classifier_dict)
+    else:
+        for title in classifier_dict:
+            res = execute_classifier(
+                classifier=Pipeline(
+                    [
+                        ('feature_selection', SelectFromModel(LinearSVC())),
+                        ('classification', classifier_dict[title])
+                    ]),
                 classifier_title=title,
                 new_representation=new_representation
             )
@@ -294,114 +366,15 @@ def run_parallel_with_RBM_representation():
     gc.collect()
 
 
-def run_parallel_with_PCA_representation():
-    """
-    Run machine learning algorithms in parallel with PCA representation.
-    :return:
-    :rtype:
-    """
-    # global vars to set
-    global g_train, g_train_label, g_test, g_test_label, g_feature_name
-    new_representation = 'RBM'
-
-    # garbage collection
-    gc.collect()
-
-    # fetch meta info
-    num_cores = multiprocessing.cpu_count()
-    classifier_dict = get_classifier_dict()
-
-    # load default representation
-    g_train, g_train_label, g_test, g_test_label, g_feature_name = rbm_representation(4000, 3550)
-
-    # storage of results
-    training_jobs_results = []
-
-    # launch threads
-    if PARALLEL_SUPPORT:
-        Parallel(n_jobs=num_cores)(delayed(execute_classifier)(classifier_dict[title], title, new_representation)
-                                   for title in classifier_dict)
-    else:
-        for title in classifier_dict:
-            res = execute_classifier(
-                classifier=classifier_dict[title],
-                classifier_title=title,
-                new_representation=new_representation
-            )
-            training_jobs_results.append(res)
-
-    # save results
-    save_parallel_mem_struct(training_jobs_results, new_representation)
-
-    # garbage collection
-    g_train = None
-    g_train_label = None
-    g_test = None
-    g_test_label = None
-    g_feature_name = None
-    training_jobs_results = None
-    gc.collect()
-
-
-def run_parallel_with_LDA_representation():
-    """
-    Run machine learning algorithms in parallel with LDA representation.
-    :return:
-    :rtype:
-    """
-    # global vars to set
-    global g_train, g_train_label, g_test, g_test_label, g_feature_name
-    new_representation = 'RBM'
-
-    # garbage collection
-    gc.collect()
-
-    # fetch meta info
-    num_cores = multiprocessing.cpu_count()
-    classifier_dict = get_classifier_dict()
-
-    # load default representation
-    g_train, g_train_label, g_test, g_test_label, g_feature_name = rbm_representation(4000, 3550)
-
-    # storage of results
-    training_jobs_results = []
-
-    # launch threads
-    if PARALLEL_SUPPORT:
-        Parallel(n_jobs=num_cores)(delayed(execute_classifier)(classifier_dict[title], title, new_representation)
-                                   for title in classifier_dict)
-    else:
-        for title in classifier_dict:
-            res = execute_classifier(
-                classifier=classifier_dict[title],
-                classifier_title=title,
-                new_representation=new_representation
-            )
-            training_jobs_results.append(res)
-
-    # save results
-    save_parallel_mem_struct(training_jobs_results, new_representation)
-
-    # garbage collection
-    g_train = None
-    g_train_label = None
-    g_test = None
-    g_test_label = None
-    g_feature_name = None
-    training_jobs_results = None
-    gc.collect()
-
-
 def main():
     """
     Main method responsible to call the machine learning algorithms in parallel
     :return:
     :rtype:
     """
-    run_parallel_with_as_it_is_representation()
+    run_parallel_with_ASITIS_representation()
+    run_parallel_with_LinearSVC_representation()
     run_parallel_with_RBM_representation()
-    # run_parallel_with_PCA_representation()
-    # run_parallel_with_LDA_representation()
 
 
 if __name__ == "__main__":
