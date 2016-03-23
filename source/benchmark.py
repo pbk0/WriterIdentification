@@ -109,7 +109,7 @@ def get_classifier_dict():
         "Pipe SVC LDA": Pipeline([('feature_selection', SelectFromModel(LinearSVC())), ('classification', LinearDiscriminantAnalysis())]),
         "Linear Discriminant Analysis": LinearDiscriminantAnalysis(),
     }
-    return dictionary_small
+    return dictionary
 
 
 def execute_classifier(classifier, classifier_title, new_representation):
@@ -164,7 +164,7 @@ def execute_classifier(classifier, classifier_title, new_representation):
 def save_parallel_mem_struct(parallel_mem_struct_list, report_type):
     """
     Save the parallel memory structure for further reporting
-    :param report_type: ['As it is' 'RBM' 'PCA']
+    :param report_type: ['As it is' 'RBM' 'PCA' 'LDA']
     :type report_type: str
     :param parallel_mem_struct_list:
     :type parallel_mem_struct_list: list
@@ -188,7 +188,7 @@ def save_parallel_mem_struct(parallel_mem_struct_list, report_type):
 def print_parallel_mem_struct(report_type):
     """
     Load and print parallel memory structure
-    :param report_type: which report you want to print ['As it is' 'RBM' 'PCA' 'all']
+    :param report_type: which report you want to print ['As it is' 'RBM' 'PCA' 'LDA' 'all']
     :type report_type: str
     :return:
     :rtype:
@@ -241,7 +241,7 @@ def run_parallel_with_as_it_is_representation():
     g_test = None
     g_test_label = None
     g_feature_name = None
-    training_jobs = None
+    training_jobs_results = None
     gc.collect()
 
 
@@ -290,7 +290,105 @@ def run_parallel_with_RBM_representation():
     g_test = None
     g_test_label = None
     g_feature_name = None
-    training_jobs = None
+    training_jobs_results = None
+    gc.collect()
+
+
+def run_parallel_with_PCA_representation():
+    """
+    Run machine learning algorithms in parallel with PCA representation.
+    :return:
+    :rtype:
+    """
+    # global vars to set
+    global g_train, g_train_label, g_test, g_test_label, g_feature_name
+    new_representation = 'RBM'
+
+    # garbage collection
+    gc.collect()
+
+    # fetch meta info
+    num_cores = multiprocessing.cpu_count()
+    classifier_dict = get_classifier_dict()
+
+    # load default representation
+    g_train, g_train_label, g_test, g_test_label, g_feature_name = rbm_representation(4000, 3550)
+
+    # storage of results
+    training_jobs_results = []
+
+    # launch threads
+    if PARALLEL_SUPPORT:
+        Parallel(n_jobs=num_cores)(delayed(execute_classifier)(classifier_dict[title], title, new_representation)
+                                   for title in classifier_dict)
+    else:
+        for title in classifier_dict:
+            res = execute_classifier(
+                classifier=classifier_dict[title],
+                classifier_title=title,
+                new_representation=new_representation
+            )
+            training_jobs_results.append(res)
+
+    # save results
+    save_parallel_mem_struct(training_jobs_results, new_representation)
+
+    # garbage collection
+    g_train = None
+    g_train_label = None
+    g_test = None
+    g_test_label = None
+    g_feature_name = None
+    training_jobs_results = None
+    gc.collect()
+
+
+def run_parallel_with_LDA_representation():
+    """
+    Run machine learning algorithms in parallel with LDA representation.
+    :return:
+    :rtype:
+    """
+    # global vars to set
+    global g_train, g_train_label, g_test, g_test_label, g_feature_name
+    new_representation = 'RBM'
+
+    # garbage collection
+    gc.collect()
+
+    # fetch meta info
+    num_cores = multiprocessing.cpu_count()
+    classifier_dict = get_classifier_dict()
+
+    # load default representation
+    g_train, g_train_label, g_test, g_test_label, g_feature_name = rbm_representation(4000, 3550)
+
+    # storage of results
+    training_jobs_results = []
+
+    # launch threads
+    if PARALLEL_SUPPORT:
+        Parallel(n_jobs=num_cores)(delayed(execute_classifier)(classifier_dict[title], title, new_representation)
+                                   for title in classifier_dict)
+    else:
+        for title in classifier_dict:
+            res = execute_classifier(
+                classifier=classifier_dict[title],
+                classifier_title=title,
+                new_representation=new_representation
+            )
+            training_jobs_results.append(res)
+
+    # save results
+    save_parallel_mem_struct(training_jobs_results, new_representation)
+
+    # garbage collection
+    g_train = None
+    g_train_label = None
+    g_test = None
+    g_test_label = None
+    g_feature_name = None
+    training_jobs_results = None
     gc.collect()
 
 
@@ -302,6 +400,8 @@ def main():
     """
     run_parallel_with_as_it_is_representation()
     run_parallel_with_RBM_representation()
+    # run_parallel_with_PCA_representation()
+    # run_parallel_with_LDA_representation()
 
 
 if __name__ == "__main__":
