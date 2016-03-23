@@ -87,3 +87,16 @@ Use pro licence of anaconda for using `intel mkl libraries`. If not available th
 ```bat
 conda install accelerate
 ```
+
+### Auto ML (optional)
++ [Github](https://github.com/automl/auto-sklearn/blob/master/source/index.rst)
+
+```bat
+pip install -r https://raw.githubusercontent.com/automl/auto-sklearn/master/requ.txt
+rem pip install git+https://github.com/automl/auto-sklearn.git#egg=autosklearn
+e:
+activate py35
+cd Github
+git clone https://github.com/automl/auto-sklearn.git
+cd auto-sklearn
+```
