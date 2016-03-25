@@ -16,7 +16,7 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
 from sklearn.svm import SVC
 from sklearn.svm import LinearSVC
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.tree import DecisionTreeClassifier, ExtraTreeClassifier
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import ExtraTreesClassifier
@@ -50,36 +50,6 @@ parallel_mem_struct = namedtuple(
     ]
 )
 
-g_classifiers = {
-    #"Logistic Regression": LogisticRegression(),
-    #"SGD": SGDClassifier(),
-    #"Gaussian Naive Bayes": GaussianNB(),
-    "1 Nearest Neighbors": KNeighborsClassifier(1),
-    #"2 Nearest Neighbors": KNeighborsClassifier(2),
-    #"3 Nearest Neighbors": KNeighborsClassifier(3),
-    "Linear Discriminant Analysis": LinearDiscriminantAnalysis(),
-    "Quadratic Discriminant Analysis": QuadraticDiscriminantAnalysis(),
-    "SVM Linear": SVC(kernel="linear", C=0.025),
-    "SVM RBF": SVC(gamma=2, C=1),
-    "Decision Tree": DecisionTreeClassifier(),
-    #"AdaBoost 10": AdaBoostClassifier(n_estimators=10),
-    #"AdaBoost 100": AdaBoostClassifier(n_estimators=100),
-    #"AdaBoost 1000": AdaBoostClassifier(n_estimators=1000),
-    "Random Forest 10": RandomForestClassifier(n_estimators=10),
-    "Random Forest 100": RandomForestClassifier(n_estimators=100),
-    "Random Forest 1000": RandomForestClassifier(n_estimators=1000),
-    "Random Forest 10000": RandomForestClassifier(n_estimators=10000),
-    "Extra Trees 10": ExtraTreesClassifier(n_estimators=10),
-    "Extra Trees 100": ExtraTreesClassifier(n_estimators=100),
-    "Extra Trees 1000": ExtraTreesClassifier(n_estimators=1000),
-    "Extra Trees 10000": ExtraTreesClassifier(n_estimators=10000),
-    #"Gradient Boosting 10": GradientBoostingClassifier(n_estimators=10),
-    #"Gradient Boosting 100": GradientBoostingClassifier(n_estimators=100),
-    #"Gradient Boosting 1000": GradientBoostingClassifier(n_estimators=1000),
-    "Pipe SVC LDA": Pipeline([('feature_selection', SelectFromModel(LinearSVC())), ('classification', LinearDiscriminantAnalysis())]),
-    "Pipe SVC Extra Trees 1000": Pipeline([('feature_selection', SelectFromModel(LinearSVC())), ('classification', ExtraTreesClassifier(n_estimators=1000))]),
-}
-
 
 def get_classifier_dict():
     """
@@ -91,42 +61,17 @@ def get_classifier_dict():
     """
     
     dictionary = {
-        "Logistic Regression": LogisticRegression(),
-        "SGD": SGDClassifier(),
-        "Gaussian Naive Bayes": GaussianNB(),
         "1 Nearest Neighbors": KNeighborsClassifier(1),
         "Linear Discriminant Analysis": LinearDiscriminantAnalysis(),
-        "Quadratic Discriminant Analysis": QuadraticDiscriminantAnalysis(),
         "SVM Linear": SVC(kernel="linear", C=0.025),
         "SVM RBF": SVC(gamma=2, C=1),
         "Decision Tree": DecisionTreeClassifier(),
-        "Random Forest 10": RandomForestClassifier(n_estimators=10),
-        "Random Forest 100": RandomForestClassifier(n_estimators=100),
-        "Extra Trees 10": ExtraTreesClassifier(n_estimators=10),
-        "Extra Trees 100": ExtraTreesClassifier(n_estimators=100),
-    }
-    
-    dictionary_ = {
-        "Logistic Regression": LogisticRegression(),
-        "SGD": SGDClassifier(),
-        "Gaussian Naive Bayes": GaussianNB(),
-        "1 Nearest Neighbors": KNeighborsClassifier(1),
-        "Linear Discriminant Analysis": LinearDiscriminantAnalysis(),
-        "Quadratic Discriminant Analysis": QuadraticDiscriminantAnalysis(),
-        "SVM Linear": SVC(kernel="linear", C=0.025),
-        "SVM RBF": SVC(gamma=2, C=1),
-        "Decision Tree": DecisionTreeClassifier(),
-        "Random Forest 10": RandomForestClassifier(n_estimators=10),
-        "Random Forest 100": RandomForestClassifier(n_estimators=100),
-        "Extra Trees 10": ExtraTreesClassifier(n_estimators=10),
-        "Extra Trees 100": ExtraTreesClassifier(n_estimators=100),
-        "Pipe SVC LDA": Pipeline([('feature_selection', SelectFromModel(LinearSVC())), ('classification', LinearDiscriminantAnalysis())]),
-        "Pipe SVC Extra Trees 100": Pipeline([('feature_selection', SelectFromModel(LinearSVC())), ('classification', ExtraTreesClassifier(n_estimators=100))]),
+        "Extra Trees": ExtraTreesClassifier()
     }
 
     dictionary_small = {
-        "Pipe SVC LDA": Pipeline([('feature_selection', SelectFromModel(LinearSVC())), ('classification', LinearDiscriminantAnalysis())]),
-        "Linear Discriminant Analysis": LinearDiscriminantAnalysis(),
+
+
     }
     return dictionary
 
@@ -320,8 +265,6 @@ def run_parallel_with_LinearSVC_representation():
 def run_parallel_with_RBM_representation():
     """
     Run machine learning algorithms in parallel with RBM representation.
-    :return:
-    :rtype:
     """
     # global vars to set
     global g_train, g_train_label, g_test, g_test_label, g_feature_name
@@ -377,6 +320,45 @@ def build_combined_report():
     representation.
 
     """
+    # open files
+    f_in_ASITIS = open("../documentation/Report_ASITIS.txt", "r")
+    f_in_LinearSVC = open("../documentation/Report_LinearSVC.txt", "r")
+    f_in_RBM = open("../documentation/Report_RBM.txt", "r")
+
+    # read all lines
+    f_in_ASITIS_lines = f_in_ASITIS.readlines()
+    f_in_LinearSVC_lines = f_in_LinearSVC.readlines()
+    f_in_RBM_lines = f_in_RBM.readlines()
+
+    # get the names of classifiers
+    classifiers = f_in_ASITIS_lines[::7]
+
+    # train scores
+    train_scores = [
+        f_in_ASITIS_lines[2::7],
+        f_in_LinearSVC_lines[2::7],
+        f_in_RBM_lines[2::7]
+    ]
+
+    # test scores
+    test_scores = [
+        f_in_ASITIS_lines[3::7],
+        f_in_LinearSVC_lines[3::7],
+        f_in_RBM_lines[3::7]
+    ]
+
+    #
+    f_out = open("../documentation/Report_combined.csv", "w")
+    for classifier, score_ASITIS, score_LinearSVC, score_RBM in zip(classifiers, test_scores[0], test_scores[1], test_scores[2]):
+        f_out.write(classifier.rstrip() + ' , ' + score_ASITIS.rstrip() + ' , ' + score_LinearSVC.rstrip() + ' , ' + score_RBM.rstrip() + '\n')
+    f_out.close()
+
+    # close files
+    f_in_ASITIS.close()
+    f_in_LinearSVC.close()
+    f_in_RBM.close()
+
+
 
 def main():
     """
@@ -387,6 +369,7 @@ def main():
     run_parallel_with_ASITIS_representation()
     run_parallel_with_LinearSVC_representation()
     run_parallel_with_RBM_representation()
+    build_combined_report()
 
 
 if __name__ == "__main__":

@@ -6,7 +6,7 @@ The new representation can then be used to do discriminative learning to improve
 from __future__ import division
 import numpy as np
 from source.utility.data_handling import load_features_and_labels
-from sklearn.decomposition import LatentDirichletAllocation, PCA
+from sklearn.decomposition import PCA
 
 
 def rbm_representation(hidden_neurons, epoch):
