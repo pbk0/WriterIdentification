@@ -1,6 +1,8 @@
 """
 This file contains code for benchmarking the scores on test data-set
 """
+from scipy.special.orthogonal import sh_chebyt
+
 from source.utility.data_handling import load_features_and_labels
 from source.generate_new_representation import rbm_representation, pca_representation
 from joblib import Parallel, delayed
@@ -59,19 +61,40 @@ def get_classifier_dict():
     :return: dictionary
     :rtype: dict
     """
-    
+
+    # Decision Tree, 0.241228070175, 0.263157894737, 0.315789473684
+    # LDA, 0.872807017544, 0.899122807018, 0.881578947368
+    # Extra Trees, 0.372807017544, 0.578947368421, 0.561403508772
+    # SVM
+    # RBF, 0.802631578947, 0.802631578947, 0.614035087719
+    # Nearest Neighbors, 0.824561403509, 0.824561403509, 0.592105263158
+
     dictionary = {
         "Nearest Neighbors": KNeighborsClassifier(1),
-        "LDA": LinearDiscriminantAnalysis(),
+        "LDA": LinearDiscriminantAnalysis(solver='svd'),
         "SVM RBF": SVC(gamma=2, C=1),
         "Decision Tree": DecisionTreeClassifier(),
         "Extra Trees": ExtraTreesClassifier()
     }
 
-    dictionary_small = {
+    dictionary_lda = {
+        "LDA svd": LinearDiscriminantAnalysis(solver='svd'),
 
+        "LDA svd 10": LinearDiscriminantAnalysis(solver='svd', n_components=10),
 
+        "LDA svd 50": LinearDiscriminantAnalysis(solver='svd', n_components=50),
+
+        "LDA svd 100": LinearDiscriminantAnalysis(solver='svd', n_components=100),
+
+        "LDA svd 150": LinearDiscriminantAnalysis(solver='svd', n_components=150),
+
+        "LDA svd 200": LinearDiscriminantAnalysis(solver='svd', n_components=200),
+
+        "LDA svd 250": LinearDiscriminantAnalysis(solver='svd', n_components=250),
+
+        "LDA svd 2000": LinearDiscriminantAnalysis(solver='svd', n_components=2000),
     }
+
     return dictionary
 
 
