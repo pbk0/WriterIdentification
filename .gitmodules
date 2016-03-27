@@ -1,6 +1,3 @@
-[submodule "documentation/final_report"]
-	path = documentation/final_report
-	url = https://git.overleaf.com/4702060cybywf
 [submodule "third_party/boost"]
 	path = third_party/boost
 	url = https://github.com/boostorg/boost.git
