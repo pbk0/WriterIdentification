@@ -1,7 +1,0 @@
-
-[submodule "third_party/boost"]
-	path = third_party/boost
-	url = https://github.com/boostorg/boost.git
-[submodule "third_party/pycuda"]
-	path = third_party/pycuda
-	url = http://git.tiker.net/trees/pycuda.git
