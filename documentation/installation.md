@@ -18,7 +18,7 @@ conda install pandas
 conda install seaborn
 ```
 
-### Boost and more dependencies
+### Boost and more dependencies (optional)
 ```bat
 git submodule add https://github.com/boostorg/boost.git third_party/boost
 git submodule update --init --recursive
@@ -33,7 +33,7 @@ cd ..
 move third_party/boost/stage/lib third_party/boost_lib
 ```
 
-### PyCUDA
+### PyCUDA (optional)
 + Make sure that vcvarsall.bat and amd64/cl.exe is in PATH
 + Make sure that CUDA bin, lib and include directories are in PATH
 + [Reference blog](https://kerpanic.wordpress.com/2015/09/28/pycuda-windows-installation-offline/)
@@ -79,7 +79,7 @@ python setup.py install
 + Next update `nvcc.profile` in cuda installation bin directory to:
 
 ```
-INCLUDES        +=  "-I$(TOP)/include" "-I$(TOP)/include/cudart" "-ID:\InstalledPrograms\Nvidia\CUDA\v75\include" $(_SPACE_)
+INCLUDES += "-I$(TOP)/include" "-I$(TOP)/include/cudart" "-ID:\InstalledPrograms\Nvidia\CUDA\v75\include" $(_SPACE_)
 ```
 
 ### Intel math kernel libraries (optional)
