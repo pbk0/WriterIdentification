@@ -77,24 +77,6 @@ def get_classifier_dict():
         "Extra Trees": ExtraTreesClassifier()
     }
 
-    dictionary_lda = {
-        "LDA svd": LinearDiscriminantAnalysis(solver='svd'),
-
-        "LDA svd 10": LinearDiscriminantAnalysis(solver='svd', n_components=10),
-
-        "LDA svd 50": LinearDiscriminantAnalysis(solver='svd', n_components=50),
-
-        "LDA svd 100": LinearDiscriminantAnalysis(solver='svd', n_components=100),
-
-        "LDA svd 150": LinearDiscriminantAnalysis(solver='svd', n_components=150),
-
-        "LDA svd 200": LinearDiscriminantAnalysis(solver='svd', n_components=200),
-
-        "LDA svd 250": LinearDiscriminantAnalysis(solver='svd', n_components=250),
-
-        "LDA svd 2000": LinearDiscriminantAnalysis(solver='svd', n_components=2000),
-    }
-
     return dictionary
 
 

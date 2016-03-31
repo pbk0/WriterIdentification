@@ -127,4 +127,4 @@ def train_rbm(num_hid, start_epoch, end_epoch, skip_iter):
 
 if __name__ == '__main__':
     #train_rbm(num_hid=4000, start_epoch=0, end_epoch=3000, skip_iter=1)
-    train_rbm(num_hid=4000, start_epoch=0, end_epoch=101, skip_iter=1)
+    train_rbm(num_hid=4000, start_epoch=0, end_epoch=3600, skip_iter=50)
