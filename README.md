@@ -31,14 +31,14 @@ We report classification accuracy of around 90 percent by doing dimensionality r
 
 ### Parallel framework
 
-[Not available check documentation folder](documentation/images/classifierbenchmark.png?raw=true "Parallel framework")
+![Not available check documentation folder](documentation/images/classifierbenchmark.png?raw=true "Parallel framework")
 
-[Not available check documentation folder](documentation/images/parallelframework.png?raw=true "Parallel framework")
+![Not available check documentation folder](documentation/images/parallelframework.png?raw=true "Parallel framework")
 
-[Not available check documentation folder](documentation/images/rbm3d.png?raw=true "Parallel framework")
+![Not available check documentation folder](documentation/images/rbm3d.png?raw=true "Parallel framework")
 
-[Not available check documentation folder](documentation/images/rbmcontor.png?raw=true "Parallel framework")
+![Not available check documentation folder](documentation/images/rbmcontor.png?raw=true "Parallel framework")
 
-[Not available check documentation folder](documentation/images/rbmerror.png?raw=true "Parallel framework")
+![Not available check documentation folder](documentation/images/rbmerror.png?raw=true "Parallel framework")
 
 
