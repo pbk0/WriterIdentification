@@ -20,10 +20,10 @@ We report classification accuracy of around 90 percent by doing dimensionality r
 
 
 ## Further Information and links
-+ [Environment and installing instructions](http://praveenneuron.github.io/writer_identification_doc/html/md_installation.html)
-+ [Data Set description](http://praveenneuron.github.io/writer_identification_doc/html/md_about_dataset.html)
-+ [Code and file Structure](http://praveenneuron.github.io/writer_identification_doc/html/md_code_structure.html)
-+ [Running the code and unittests](http://praveenneuron.github.io/writer_identification_doc/html/md_running_code.html)
++ [Environment and installing instructions](http://spikingneurons.github.io/writer_identification_doc/html/md_installation.html)
++ [Data Set description](http://spikingneurons.github.io/writer_identification_doc/html/md_about_dataset.html)
++ [Code and file Structure](http://spikingneurons.github.io/writer_identification_doc/html/md_code_structure.html)
++ [Running the code and unittests](http://spikingneurons.github.io/writer_identification_doc/html/md_running_code.html)
 
 
 ## Report and results
